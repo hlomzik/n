@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Visible vertexes of n-gon</title>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.3.6/svg.min.js"></script>
+<script src="n.js"></script>
+<script>
+const data = {
+    a: [ 2, -1 ],
+    n: 7,
+    dots:[ [ 2, 1 ], [ 3, 4 ], [ 5, 7 ], [ 8, 3 ], [ 7, 1 ], [ 5, 0 ], [ 3, 0 ] ]
+}
+
+const canvas = SVG(document.body).size(300, 300)
+// based on data
+canvas.viewbox(-2, -2, 12, 12)
+draw(canvas, data)
+
+function draw (canvas, { a, n, dots }) {
+    // CENTER
+    const c = center(dots)
+    canvas.circle(0.3).cx(c[0]).cy(c[1]).fill('blue')
+
+    // A
+    canvas.circle(0.3).cx(a[0]).cy(a[1]).fill('red')
+
+    // N-GON
+    canvas.polygon(dots).fill('none').stroke({ width: 0.1 })
+
+    // VISIBLE VERTEXES
+    const visible = solve({ a, n, dots })
+    visible.forEach(dot => canvas.circle(0.4).cx(dot[0]).cy(dot[1]).fill('orange'))
+}
+</script>
+</body>
+</html>
