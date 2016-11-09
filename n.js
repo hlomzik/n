@@ -39,6 +39,21 @@ function isOpposite([ from, to ], center, dot) {
 }
 
 /**
+ * Get the center of n-gon
+ * @param {Point[]} dots
+ * @return {Point}
+ */
+function center (dots) {
+    return dots
+        // to int
+        .map(([ x, y ]) => [ +x, +y ])
+        // sum coords of all the dots
+        .reduce((c, d) => [ c[0] + d[0], c[1] + d[1] ])
+        // and find the average
+        .map(d => d / dots.length)
+}
+
+/**
  * Get the vertexes of `n`-gon visible from point `a`.
  * @param {Point} a
  * @param {number} n number of vertexes
@@ -48,11 +63,7 @@ function isOpposite([ from, to ], center, dot) {
 function solve ({ a, n, dots }) {
     // to int
     dots = dots.map(([ x, y ]) => [ +x, +y ])
-    const center = dots
-        // sum coords of all the dots
-        .reduce((c, d) => [ c[0] + d[0], c[1] + d[1] ])
-        // and find the average
-        .map(d => d / n)
+    const c = center(dots)
 
     return dots
         // get lines from given dots
@@ -62,7 +73,7 @@ function solve ({ a, n, dots }) {
             dot
         ])
         // get only visible lines
-        .filter(line => isOpposite(line, center, a))
+        .filter(line => isOpposite(line, c, a))
         // get all dots from visible lines (without doubles)
         .reduce((dots, [ d1, d2 ]) => {
             !dots.includes(d1) && dots.push(d1)
