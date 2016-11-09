@@ -26,6 +26,14 @@ function draw (canvas, { a, n, dots }) {
     // A
     canvas.circle(0.3).cx(a[0]).cy(a[1]).fill('red')
 
+    // EDGES
+    dots.forEach((dot, i) => {
+        const from = dots[(i || dots.length) - 1]
+        const [ a, b ] = lineEq(from, dot)
+        // from side to side
+        canvas.line(-2, b - a - a, 12, 12 * a + b ).stroke({ width: 0.02 })
+    })
+
     // N-GON
     canvas.polygon(dots).fill('none').stroke({ width: 0.1 })
 
