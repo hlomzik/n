@@ -63,6 +63,7 @@ const data = {
 
 const $ = q => Array.from(document.querySelectorAll(q))
 const $$ = name => Array.from(document.getElementsByName(name))
+const on = (element, event, f) => element.addEventListener(event, f)
 
 function rows () {
     const n = +$$('n')[0].value
@@ -75,6 +76,10 @@ function rows () {
     // ADD
     for (let i = points.length; i < n; i++) {
         const point = sample.cloneNode(true)
+        // add events to fresh inputs
+        Array.from(point.getElementsByTagName('input')).forEach(input => {
+            on(input, 'change', () => draw(canvas, parse()))
+        })
         container.appendChild(point)
     }
 
@@ -84,7 +89,7 @@ function rows () {
     }
 }
 
-$$('n')[0].onchange = rows
+on($$('n')[0], 'change', rows)
 rows()
 
 function fill ({ a, n, dots }) {
@@ -113,7 +118,7 @@ const canvas = SVG(document.querySelector('.canvas')).size(300, 300)
 // based on data
 canvas.viewbox(-2, -2, 12, 12)
 draw(canvas, data)
-$('input').forEach(input => input.onchange = () => draw(canvas, parse()))
+$('input').forEach(input => on(input, 'change', () => draw(canvas, parse())))
 
 function draw (canvas, { a, n, dots }) {
     canvas.clear()
